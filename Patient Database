@@ -1,0 +1,503 @@
+
+<head>
+  <meta charset="utf-8">
+  <title>Patient Database</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: border-color 0.3s ease;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    
+    .prescription {
+      margin-top: 30px;
+      text-align: center;
+      display: none;
+    }
+    
+    .prescription p {
+      margin-bottom: 10px;
+    }
+    
+    .prescription .sign {
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+    
+    .history-popup {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      animation: slide-in 0.5s ease;
+      display: none;
+    }
+    
+    .history-popup.active {
+      display: block;
+    }
+    
+    .registration-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      animation: slide-in 0.5s ease;
+      display: none;
+    }
+.form-scroll {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+    .registration-popup.active {
+      display: block;
+    }
+    
+    @keyframes slide-in {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+<div class="logo-text">
+      <span>H</span>ealth <span>C</span>are <!-- Logo text with different styles -->
+    </div>
+    
+    <div class="form-group">
+      <label for="healthCardNumber"><i class="fas fa-id-card"></i> Health Card Number:</label>
+      <input type="text" id="healthCardNumber">
+    </div>
+    
+    <div class="form-group">
+      <label for="patientName"><i class="fas fa-user"></i> Patient Name:</label>
+      <input type="text" id="patientName" readonly>
+    </div>
+    
+    <div class="form-group">
+      <label for="contactDetails"><i class="fas fa-phone"></i> Contact Details:</label>
+      <input type="text" id="contactDetails" readonly>
+    </div>
+    
+    <div class="form-group">
+      <button class="btn" onclick="generatePrescription()"><i class="fas fa-file-prescription"></i> Generate Prescription</button>
+      <button class="btn" onclick="savePrescription()"><i class="fas fa-save"></i> Save</button>
+    </div>
+    
+    <div class="prescription" id="prescription">
+      <p><strong>Patient Name:</strong> <span id="prescriptionPatientName"></span></p>
+      <p><strong>Contact Details:</strong> <span id="prescriptionContactDetails"></span></p>
+      <p><strong>Blood Group:</strong> <span id="prescriptionBloodGroup"></span></p>
+      <p><strong>Previous Medication Names:</strong> <span id="prescriptionPreviousMedication"></span></p>
+      <p><strong>Vaccine Status:</strong> <span id="prescriptionVaccineStatus"></span></p>
+      <p><strong>Antibiotic Resistance:</strong> <span id="prescriptionAntibioticResistance"></span></p>
+      <p><strong>Chronic Diseases:</strong> <span id="prescriptionChronicDiseases"></span></p>
+      
+      <!-- ... Existing HTML code ... -->
+<div class="form-group">
+  <label for="diagnosis"><i class="fas fa-notes-medical"></i> Diagnosis:</label>
+  <input type="text" id="diagnosis">
+</div>
+
+<div class="form-group">
+  <label for="medication"><i class="fas fa-pills"></i> General Medication:</label>
+  <input type="text" id="medication">
+</div>
+
+<div class="form-group">
+  <label for="controlledMedicine"><i class="fas fa-pills"></i> Controlled Medicine:</label>
+  <input type="text" id="controlledMedicine">
+</div>
+
+<div class="form-group">
+  <label for="advice"><i class="fas fa-comments-medical"></i> Advice:</label>
+  <input type="text" id="advice">
+</div>
+
+<!-- ... Existing HTML code ... -->
+
+      
+      <div class="sign">
+        <p><strong>Doctor's Signature:</strong></p>
+        <i class="fas fa-signature fa-2x"></i>
+      </div>
+      
+      <div class="sign">
+        <p><strong>Doctor's Seal:</strong></p>
+        <i class="fas fa-stamp fa-2x"></i>
+      </div>
+      
+      <div class="form-group">
+        <button class="btn" onclick="showHistoryPopup()"><i class="fas fa-history"></i> Patient History</button>
+        <button class="btn" onclick="openRegistrationForm()"><i class="fas fa-user-plus"></i> New Patient Register</button>
+       <button class="btn" onclick="showHealthTestReport()"><i class="fas fa-file-alt"></i> Health Test Report</button>
+
+        <button class="btn" onclick="printPrescription()"><i class="fas fa-print"></i> Print</button>
+        <button class="btn" onclick="openPopup()"><i class="fas fa-chart-bar"></i> Controlled Medicine</button>
+        
+      </div>
+    </div>
+  </div>
+   
+  <div class="history-popup" id="historyPopup">
+    <h2>Patient History</h2>
+    <p>Mohammad Jamal Uddin is a non-smoker and occasionally consumes alcohol. He reports a sedentary lifestyle and a diet high in processed foods. Further assessment and diagnostic tests are being conducted to identify the cause of his current symptoms.</p>
+  </div>
+  <div class="chart-popup" id="chartPopup">
+    <h2>Approved Medicines</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Medicine</th>
+          <th>Quantity</th>
+          <th>Taken</th>
+          <th>Expiry Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pseudoephedrine</td>
+          <td>21</td>
+          <td>07</td>
+          <td>2023-12-31</td>
+        </tr>
+        <tr>
+          <td>Loperamide</td>
+          <td>14</td>
+           <td>07</td>
+          <td>2024-06-30</td>
+        </tr>
+        <tr>
+          <td>Diphenhydramine</td>
+          <td>30</td>
+          <td>14</td>
+          <td>2023-10-15</td>
+        </tr>
+      </tbody>
+    </table>
+     <button class="close-btn" onclick="closePopup()"><i class="fas fa-times"></i></button>
+  </div>
+</div>
+  
+  <div class="health-test-report-popup" id="healthTestReportPopup">
+  <h2>Health Test Report</h2>
+<div class="photo-gallery">
+  <div class="gallery-item">
+    <img src="https://www.irastoworldhealth.com/web/style/detail/uploads/article/13/a6adc71383e812076b29451a07141dc6.jpeg?220521" alt="Image 1">
+  </div>
+  <div class="gallery-item">
+    <img src="https://d2jx2rerrg6sh3.cloudfront.net/image-handler/ts/20160620022905/ri/590/picture/2016/6/Urine_analysis_shutterstock_146356910.jpg" alt="Image 2">
+  </div>
+  <div class="gallery-item">
+    <img src="https://americanhealthimaging.com/wp-content/uploads/2021/01/BrainScan.jpg" alt="Image 3">
+  </div>
+</div>
+  <button class="btn" onclick="closeHealthTestReport()"><i class="fas fa-times"></i> Close</button>
+</div>
+
+ <div class="registration-popup" id="registrationPopup">
+  <h2>New Patient Registration</h2>
+  <div class="form-scroll">
+    <form>
+      <div class="form-group">
+        <label for="newPatientName">Patient Name:</label>
+        <input type="text" id="newPatientName">
+      </div>
+      
+      <div class="form-group">
+        <label for="newPatientContact">Contact Details:</label>
+        <input type="text" id="newPatientContact">
+      </div>
+      
+      <div class="form-group">
+        <label for="patientAge">Patient Age:</label>
+        <input type="text" id="patientAge">
+      </div>
+      
+      <div class="form-group">
+        <label for="localGuardian">Local Guardian:</label>
+        <input type="text" id="localGuardian">
+      </div>
+      
+      <div class="form-group">
+        <label for="operationHistory">Operation History (if any):</label>
+        <input type="text" id="operationHistory">
+      </div>
+      
+      <div class="form-group">
+        <label for="maritalStatus">Marital Status:</label>
+        <input type="text" id="maritalStatus">
+      </div>
+      
+      <div class="form-group">
+        <label for="currentMedicine">Current Medicine:</label>
+        <input type="text" id="currentMedicine">
+      </div>
+      
+      <div class="form-group">
+        <label for="chronicDisease">Chronic Disease:</label>
+        <input type="text" id="chronicDisease">
+      </div>
+      
+      <div class="form-group">
+        <label for="medicalReport">Medical Report (if any):</label>
+        <input type="text" id="medicalReport">
+      </div>
+      
+      <div class="form-group">
+        <label for="diabetic">Diabetes:</label>
+        <input type="checkbox" id="diabetic">
+      </div>
+      
+      <div class="form-group">
+        <label for="highBloodPressure">Hypertension:</label>
+        <input type="checkbox" id="highBloodPressure">
+      </div>
+      
+      <div class="form-group">
+        <label for="kidneyDisease">Kidney Disease:</label>
+        <input type="checkbox" id="kidneyDisease">
+      </div>
+      
+      <div class="form-group">
+        <label for="arthritis">Arthritis:</label>
+        <input type="checkbox" id="arthritis">
+      </div>
+      
+      <div class="form-group">
+        <button class="btn" type="submit" onclick="registerPatient()"><i class="fas fa-user-plus"></i> Register</button>
+        <button class="btn" type="button" onclick="closeRegistrationForm()"><i class="fas fa-times"></i> Close</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script>
+    function generatePrescription() {
+      const healthCardNumber = document.getElementById("healthCardNumber").value;
+      const patientName = getRandomName();
+      const contactDetails = generateDummyContactDetails();
+      const bloodGroup = getDummyBloodGroup();
+      const previousMedication = getDummyPreviousMedication();
+      const vaccineStatus = getDummyVaccineStatus();
+      const antibioticResistance = getDummyAntibioticResistance();
+      const chronicDiseases = getDummyChronicDiseases();
+      
+      document.getElementById("patientName").value = patientName;
+      document.getElementById("contactDetails").value = contactDetails;
+      document.getElementById("prescriptionPatientName").textContent = patientName;
+      document.getElementById("prescriptionContactDetails").textContent = contactDetails;
+      document.getElementById("prescriptionBloodGroup").textContent = bloodGroup;
+      document.getElementById("prescriptionPreviousMedication").textContent = previousMedication;
+      document.getElementById("prescriptionVaccineStatus").textContent = vaccineStatus;
+      document.getElementById("prescriptionAntibioticResistance").textContent = antibioticResistance;
+      document.getElementById("prescriptionChronicDiseases").textContent = chronicDiseases;
+      
+      document.getElementById("prescription").style.display = "block";
+    }
+    
+    function getRandomName() {
+      const names = ["Mohammad Jamal Uddin", "Saleha Begum", "Rohima Akter", "Riaz Uddin Hannan"];
+      return names[Math.floor(Math.random() * names.length)];
+    }
+    
+    function generateDummyContactDetails() {
+      const contact = "0172156420";
+      return contact;
+    }
+    
+    function getDummyBloodGroup() {
+      const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+      return bloodGroups[Math.floor(Math.random() * bloodGroups.length)];
+    }
+    
+    function getDummyPreviousMedication() {
+      const medications = ["Paracetamol ", "Amoxicillin", "Amlodipine", "Ranitidine"];
+      return medications.join(", ");
+    }
+    
+    function getDummyVaccineStatus() {
+      const vaccineStatuses = ["Up to date", "Incomplete", "Not vaccinated"];
+      return vaccineStatuses[Math.floor(Math.random() * vaccineStatuses.length)];
+    }
+    
+    function getDummyAntibioticResistance() {
+      const resistanceOptions = ["Sensitive", "Resistant", "Intermediate"];
+      const antibiotics = ["Meropenem", "Vancomycin", "Levofloxacin"];
+      const resistanceData = antibiotics.map(antibiotic => {
+        const resistance = resistanceOptions[Math.floor(Math.random() * resistanceOptions.length)];
+        return `${antibiotic}: ${resistance}`;
+      });
+      return resistanceData.join(", ");
+    }
+    
+    function getDummyChronicDiseases() {
+      const diseases = ["Diabetes", "Hypertension", "Asthma", "Arthritis"];
+      return diseases.join(", ");
+    }
+    
+    function showHistoryPopup() {
+      document.getElementById("historyPopup").classList.toggle("active");
+    }
+    function generateRandomHealthCardNumber() {
+    // Generate a random number between 1000000000 and 9999999999
+    return Math.floor(Math.random() * 9000000000) + 1000000000;
+  }
+     function printPrescription() {
+    const patientName = document.getElementById("prescriptionPatientName").textContent;
+    const contactDetails = document.getElementById("prescriptionContactDetails").textContent;
+    const bloodGroup = document.getElementById("prescriptionBloodGroup").textContent;
+    const previousMedication = document.getElementById("prescriptionPreviousMedication").textContent;
+    const vaccineStatus = document.getElementById("prescriptionVaccineStatus").textContent;
+    const antibioticResistance = document.getElementById("prescriptionAntibioticResistance").textContent;
+    const chronicDiseases = document.getElementById("prescriptionChronicDiseases").textContent;
+    const diagnosis = document.getElementById("diagnosis").value;
+    const generalMedication = document.getElementById("medication").value;
+    const controlledMedicine = document.getElementById("controlledMedicine").value;
+    const advice = document.getElementById("advice").value;
+  const healthCardNumber = generateRandomHealthCardNumber();
+
+    const printContent = `
+     <div class="watermark">Patient Copy</div>
+      <h2>Patient Prescription</h2>
+      <p><strong>Health Card Number:</strong> ${healthCardNumber}</p>
+      <p><strong>Patient Name:</strong> ${patientName}</p>
+      <p><strong>Contact Details:</strong> ${contactDetails}</p>
+      <p><strong>Blood Group:</strong> ${bloodGroup}</p>
+      <p><strong>Previous Medication Names:</strong> ${previousMedication}</p>
+      <p><strong>Vaccine Status:</strong> ${vaccineStatus}</p>
+      <p><strong>Antibiotic Resistance:</strong> ${antibioticResistance}</p>
+      <p><strong>Chronic Diseases:</strong> ${chronicDiseases}</p>
+      <p><strong>Diagnosis:</strong> ${diagnosis}</p>
+      <p><strong>General Medication:</strong> ${generalMedication}</p>
+      <p><strong>Controlled Medicine:</strong> ${controlledMedicine}</p>
+      <p><strong>Advice:</strong> ${advice}</p>
+    `;
+
+    const originalContent = document.body.innerHTML;
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
+  }
+    
+    function openRegistrationForm() {
+      document.getElementById("registrationPopup").classList.add("active");
+    }
+    
+    function closeRegistrationForm() {
+      document.getElementById("registrationPopup").classList.remove("active");
+    }
+    
+    function openVaccineAlertForm() {
+      document.getElementById("vaccineAlertPopup").classList.add("active");
+    }
+    
+    function closeVaccineAlertForm() {
+      document.getElementById("vaccineAlertPopup").classList.remove("active");
+    }
+    
+    function registerPatient() {
+      const newPatientName = document.getElementById("newPatientName").value;
+      const newPatientContact = document.getElementById("newPatientContact").value;
+      
+      // Perform registration logic here
+      
+      closeRegistrationForm();
+      alert("Patient registered successfully!");
+    }
+    
+   
+     
+    
+    function savePrescription() {
+      const prescriptionData = {
+        patientName: document.getElementById("patientName").value,
+        contactDetails: document.getElementById("contactDetails").value,
+        bloodGroup: document.getElementById("prescriptionBloodGroup").textContent,
+        previousMedication: document.getElementById("prescriptionPreviousMedication").textContent,
+        vaccineStatus: document.getElementById("prescriptionVaccineStatus").textContent,
+        antibioticResistance: document.getElementById("prescriptionAntibioticResistance").textContent,
+        chronicDiseases: document.getElementById("prescriptionChronicDiseases").textContent,
+        diagnosis: document.getElementById("diagnosis").value,
+        medication: document.getElementById("medication").value,
+        advice: document.getElementById("advice").value
+      };
+      
+      // Perform save logic here
+      
+      alert("Prescription saved successfully!");
+    }
+  </script>
+</body>
