@@ -1,0 +1,236 @@
+
+<head>
+  <meta charset="utf-8">
+  <title>Medicine Control Authority</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: border-color 0.3s ease;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    
+    .stock-info {
+      margin-top: 30px;
+      text-align: center;
+    }
+    
+    .stock-info p {
+      margin-bottom: 10px;
+    }
+    
+    .chart-container {
+      margin-top: 30px;
+    }
+    
+    .chart {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .chart th, .chart td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    
+    .chart th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Medicine Control Authority</h1>
+    
+    <div class="form-group">
+      <label for="drugLicenseName"><i class="fas fa-prescription-bottle-alt"></i> Drug License Name:</label>
+      <input type="text" id="drugLicenseName" placeholder="Enter Drug License Name">
+    </div>
+    
+    <div class="stock-info" id="stockInfo" style="display: none;">
+      <p><strong>Pharmacy Name:</strong> <span id="pharmacyName"></span></p>
+      <p><strong>Drug License Number:</strong> <span id="drugLicenseNumber"></span></p>
+    </div>
+    
+    <div class="chart-container" id="chartContainer" style="display: none;">
+      <h2>Medicine Stock Record</h2>
+      <table class="chart">
+        <thead>
+          <tr>
+            <th>Company Name</th>
+            <th>Medicine Name</th>
+            <th>Quantity</th>
+            <th>Remaining Medicine</th>
+            <th>Expiry Date</th>
+          </tr>
+        </thead>
+        <tbody id="stockTableBody">
+          <!-- Stock records will be dynamically added here -->
+        </tbody>
+      </table>
+      
+      
+    </div>
+  </div>
+  <p style="text-align: center; margin-top: 20px;">
+  <strong>Example Drug License Number:</strong> 121 or 123
+</p>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script>
+    const drugLicenseNameInput = document.getElementById("drugLicenseName");
+    const stockInfo = document.getElementById("stockInfo");
+    const pharmacyName = document.getElementById("pharmacyName");
+    const drugLicenseNumber = document.getElementById("drugLicenseNumber");
+    const chartContainer = document.getElementById("chartContainer");
+    const stockTableBody = document.getElementById("stockTableBody");
+    
+    drugLicenseNameInput.addEventListener("input", function() {
+      const drugLicenseName = drugLicenseNameInput.value;
+      
+      if (drugLicenseName.trim() !== "") {
+        // Simulate data retrieval from a database based on the drug license name
+        fetchStockData(drugLicenseName)
+          .then(function(stockData) {
+            stockTableBody.innerHTML = ""; // Clear previous stock records
+            
+            stockData.forEach(function(record) {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${record.companyName}</td>
+                <td>${record.medicineName}</td>
+                <td>${record.quantity}</td>
+                <td>${record.remainingMedicine}</td>
+                <td>${record.expiryDate}</td>
+              `;
+              stockTableBody.appendChild(row);
+            });
+            
+            pharmacyName.textContent = stockData[0].pharmacyName; // Get the pharmacy name from the first record
+            drugLicenseNumber.textContent = stockData[0].drugLicenseNumber; // Get the drug license number from the first record
+            
+            stockInfo.style.display = "block";
+            chartContainer.style.display = "block";
+          })
+          .catch(function(error) {
+            console.log(error);
+            stockInfo.style.display = "none";
+            chartContainer.style.display = "none";
+          });
+      } else {
+        stockInfo.style.display = "none";
+        chartContainer.style.display = "none";
+      }
+    });
+    
+    // Simulated asynchronous data retrieval function
+    function fetchStockData(drugLicenseName) {
+      return new Promise(function(resolve, reject) {
+        // Simulate an asynchronous operation (e.g., fetching data from a database)
+        setTimeout(function() {
+          // Sample data based on drug license name
+          let stockData = [];
+          if (drugLicenseName === "121") {
+            stockData = [
+              {
+                pharmacyName: "Mojumder Pharmacy,Cumilla",
+                drugLicenseNumber: "00121",
+                companyName: "Incepta Pharmaceuticals",
+                medicineName: "Arofil",
+                quantity: 50,
+                remainingMedicine: 25,
+                expiryDate: "2023-12-31"
+              },
+              {
+                pharmacyName: "Pharmacy A",
+                drugLicenseNumber: "121",
+                companyName: "Aristopharma Ltd",
+                medicineName: "A-Mycin",
+                quantity: 100,
+                remainingMedicine: 40,
+                expiryDate: "2024-06-30"
+              }
+            ];
+          } else if (drugLicenseName === "123") {
+            stockData = [
+              {
+                pharmacyName: "Dhaka Pharmacy Ltd,Gazipur",
+                drugLicenseNumber: "00123",
+                companyName: "Labaid Pharmaceuticals",
+                medicineName: "Cardolab -5mg",
+                quantity: 80,
+                remainingMedicine: 35,
+                expiryDate: "2023-10-15"
+              },
+              {
+                pharmacyName: "Pharmacy B",
+                drugLicenseNumber: "123",
+                companyName: "Renata Limited",
+                medicineName: "Alzacare",
+                quantity: 60,
+                remainingMedicine: 20,
+                expiryDate: "2024-09-30"
+              }
+            ];
+          }
+          
+          resolve(stockData);
+        }, 1000); // Simulate a delay of 1 second
+      });
+    }
+  </script>
+</body>
+
